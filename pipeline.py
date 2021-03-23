@@ -54,21 +54,25 @@ class IDFHepler(object):
 class LexHelper():
     def __init__(self, config):
         self.config = config
-        self.word_idf = json.loads(open(self.config['data_dir'] + self.config['token_idf_path'], "r").readline())
+        self.word_idf = json.loads(
+            open(self.config['data_dir'] + self.config['token_idf_path'], "r").readline())
         self.batch_size = 1000
         self.max_query_len = config['max_query_len']
         self.max_name_len = config['max_name_len']
         self.max_body_len = config['max_body_len']
 
     def run(self):
-        self.generate_idf_matrix(self.config['valid'], self.config['data_dir'] + self.config['valid_lex'])
-        self.generate_idf_matrix(self.config['eval'], self.config['data_dir'] + self.config['eval_lex'])
+        self.generate_idf_matrix(
+            self.config['valid'], self.config['data_dir'] + self.config['valid_lex'])
+        self.generate_idf_matrix(
+            self.config['eval'], self.config['data_dir'] + self.config['eval_lex'])
 
     def generate_idf_matrix(self, dataset, lex_matrix_save_path):
         logger.info(f'{dataset}')
-        self.data = json.loads(open(self.config['data_dir'] + dataset, 'r').readline())
+        self.data = json.loads(
+            open(self.config['data_dir'] + dataset, 'r').readline())
         self.query, self.name, self.body = [], [], []
-        for code_snippet in tqdm(self.data,desc='extract query name body'):
+        for code_snippet in tqdm(self.data, desc='extract query name body'):
             self.query.append(code_snippet['query'].strip().split(' '))
             self.name.append(code_snippet['name'].strip().split(' '))
             self.body.append(code_snippet['body'].strip().split(' '))
@@ -78,7 +82,8 @@ class LexHelper():
             logger.info(f'batch begin {begin}')
             for index in tqdm(range(begin, begin + self.batch_size)):
                 raw_query = self.query[index]
-                query_name, query_body = self.get_match_batch(raw_query, begin, self.name, self.body)
+                query_name, query_body = self.get_match_batch(
+                    raw_query, begin, self.name, self.body)
                 save(lex_matrix_save_path + str(index) + 'query_name', query_name)
                 save(lex_matrix_save_path + str(index) + 'query_body', query_body)
 
@@ -86,10 +91,11 @@ class LexHelper():
         query_name_lex_matrices, query_body_lex_matrices = [], []
 
         for i in range(batch_begin, batch_begin + self.batch_size):
+            # if i < len(raw_names):
             raw_name = raw_names[i]
             raw_code = raw_bodies[i]
-            doc_name_lex_matrix, query_body_lex_matrix = get_lex_match(self.word_idf,raw_query, raw_name, raw_code,
-                                                                       self.max_query_len,self.max_name_len,self.max_body_len)
+            doc_name_lex_matrix, query_body_lex_matrix = get_lex_match(self.word_idf, raw_query, raw_name, raw_code,
+                                                                       self.max_query_len, self.max_name_len, self.max_body_len)
             query_name_lex_matrices.append(doc_name_lex_matrix)
             query_body_lex_matrices.append(query_body_lex_matrix)
         return np.array(query_name_lex_matrices), np.array(query_body_lex_matrices)
@@ -98,18 +104,19 @@ class LexHelper():
 class Pipeline():
     def __init__(self, config):
         self.config = config
-        self.train_data = json.loads(open(self.config['data_dir'] + self.config['train'], 'r').readline())
+        self.train_data = json.loads(
+            open(self.config['data_dir'] + self.config['train'], 'r').readline())
         self.query, self.name, self.body = [], [], []
-        for code_snippet in tqdm(self.train_data,desc='load train data'):
+        for code_snippet in tqdm(self.train_data, desc='load train data'):
             self.query.append(code_snippet['query'].strip().split(' '))
             self.name.append(code_snippet['name'].strip().split(' '))
             self.body.append(code_snippet['body'].strip().split(' '))
-        self.train_temp_filepath=self.config['data_dir'] + 'train_temp.txt'
+        self.train_temp_filepath = self.config['data_dir'] + 'train_temp.txt'
 
     def get_vocab(self):
         logger.info('\nget vocab...')
 
-        max_num=10000000
+        max_num = 10000000
         vocabs = {
             'query': (Counter({'pad': max_num, 'unk': max_num-1}), self.query),
             'name': (Counter({'pad': max_num, 'unk': max_num-1}), self.name),
@@ -127,7 +134,8 @@ class Pipeline():
             for index, (word, occurrences) in enumerate(counter.most_common()):
                 vocab[word] = index
                 vocab_size = vocab_size + 1
-                if vocab_size >= self.config[key + '_vocab_size']: break
+                if vocab_size >= self.config[key + '_vocab_size']:
+                    break
 
             logging.info(f'total vocab: {len(counter)}')
             logging.info(f'vocab_size: {len(vocab)}')
@@ -158,12 +166,13 @@ class Pipeline():
         with codecs.open(self.train_temp_filepath, 'r', 'utf-8') as f:
             for line in f.readlines():
                 train_data_list.append(line.rstrip().split(' '))
-        idf_helper = IDFHepler(self.config['data_dir'] + self.config['token_idf_path'])
+        idf_helper = IDFHepler(
+            self.config['data_dir'] + self.config['token_idf_path'])
         idf_helper.calcu_idf(train_data_list)
 
     def get_lex_matrix_for_valid_and_eval(self):
         logger.info('\ngenerate lexical matrix for valid and eval')
-        lexhelper=LexHelper(self.config)
+        lexhelper = LexHelper(self.config)
         lexhelper.run()
 
     def run(self):
