@@ -145,3 +145,5 @@ predictions/final_score/
 
 ir_based/results
 
+data/
+output/

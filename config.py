@@ -4,10 +4,11 @@ from collections import OrderedDict
 def get_config():
     config = OrderedDict()
 
+    # '../deep-code-search/pytorch/data/github'
     config['data_dir'] = './data/example/'
 
-    config['train'] = 'train.json'
-    config['valid'] = 'valid.json'
+    config['train'] = 'train.data_mix_structure.json'
+    config['valid'] = 'valid.data_origin.json'
     config['valid_lex'] = 'valid/'
     config['eval'] = 'eval.json'
     config['eval_lex'] = 'eval/'
@@ -21,9 +22,9 @@ def get_config():
     config['name_vocab_size'] = 10000
     config['body_vocab_size'] = 10000
 
-    config['query_vocab_path'] = 'query_vocab.json'
-    config['name_vocab_path'] = 'name_vocab.json'
-    config['body_vocab_path'] = 'body_vocab.json'
+    config['query_vocab_path'] = 'vocab.desc_mix.json'
+    config['name_vocab_path'] = 'vocab.name_mix.json'
+    config['body_vocab_path'] = 'vocab.tokens_mix.json'
 
     config['token_idf_path'] = 'token_idf.json'
 
