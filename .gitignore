@@ -145,5 +145,7 @@ predictions/final_score/
 
 ir_based/results
 
-data/
+data/example/eval
+data/example/valid
+*.bin
 output/
