@@ -3,6 +3,7 @@ import json
 import logging
 from collections import Counter
 import os
+import argparse
 
 import fasttext
 import numpy as np
@@ -185,6 +186,23 @@ class Pipeline():
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+
+    # Required parameters
+    parser.add_argument("--data_dir", default="./data/example/", type=str, required=False,
+                        help="The input data dir.")
+    parser.add_argument("--train_file", default="train.data_origin.json", type=str, required=False,
+                        help="The input data dir.")
+    parser.add_argument("--valid_file", default="valid.data_origin.json", type=str, required=False,
+                        help="The input data dir.")
+    parser.add_argument("--eval_file", default="eval.json", type=str, required=False,
+                        help="The input data dir.")
+    args = parser.parse_args()
+    
     config = get_config()
-    pipeline = Pipeline(config)
+    config['data_dir'] = args.data_dir
+    config['train'] = args.train_file
+    config['valid'] = args.valid_file
+    config['valid'] = args.eval_file
+    pipeline = Pipeline(config, args)
     pipeline.run()

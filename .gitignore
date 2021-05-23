@@ -149,3 +149,4 @@ data/example/eval
 data/example/valid
 *.bin
 output/
+data/

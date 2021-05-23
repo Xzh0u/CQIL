@@ -20,6 +20,14 @@ def parse_args():
                              ' the `train` mode trains CQIL;'
                              ' the `valid` mode tests CQIL in the valid set;'
                              ' the `eval` mode tests CQIL in the eval set.')
+    parser.add_argument("--data_dir", default="./data/example/", type=str, required=False,
+                        help="The input data dir.")
+    parser.add_argument("--train_file", default="train.data_origin.json", type=str, required=False,
+                        help="The input data dir.")
+    parser.add_argument("--valid_file", default="valid.data_origin.json", type=str, required=False,
+                        help="The input data dir.")
+    parser.add_argument("--eval_file", default="eval.json", type=str, required=False,
+                        help="The input data dir.")
     return parser.parse_args()
 
 
@@ -27,6 +35,10 @@ if __name__ == '__main__':
     args = parse_args()
 
     config = get_config()
+    config['data_dir'] = args.data_dir
+    config['train'] = args.train_file
+    config['valid'] = args.valid_file
+    config['valid'] = args.eval_file
     logger.info(config)
 
     CQIL_helper = CQILHelper(config)
