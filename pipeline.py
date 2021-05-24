@@ -77,7 +77,7 @@ class LexHelper():
             self.query.append(code_snippet['query'].strip().split(' '))
             self.name.append(code_snippet['name'].strip().split(' '))
             self.body.append(code_snippet['body'].strip().split(' '))
-
+        os.makedirs(lex_matrix_save_path, exist_ok=True)
         data_size = len(self.query)
         for begin in range(0, data_size, self.batch_size):
             logger.info(f'batch begin {begin}')
