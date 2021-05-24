@@ -204,5 +204,5 @@ if __name__ == '__main__':
     config['train'] = args.train_file
     config['valid'] = args.valid_file
     config['valid'] = args.eval_file
-    pipeline = Pipeline(config, args)
+    pipeline = Pipeline(config)
     pipeline.run()
