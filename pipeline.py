@@ -82,11 +82,12 @@ class LexHelper():
         for begin in range(0, data_size, self.batch_size):
             logger.info(f'batch begin {begin}')
             for index in tqdm(range(begin, begin + self.batch_size)):
-                raw_query = self.query[index]
-                query_name, query_body = self.get_match_batch(
-                    raw_query, begin, self.name, self.body)
-                save(lex_matrix_save_path + str(index) + 'query_name', query_name)
-                save(lex_matrix_save_path + str(index) + 'query_body', query_body)
+                if index < len(self.query):
+                    raw_query = self.query[index]
+                    query_name, query_body = self.get_match_batch(
+                        raw_query, begin, self.name, self.body)
+                    save(lex_matrix_save_path + str(index) + 'query_name', query_name)
+                    save(lex_matrix_save_path + str(index) + 'query_body', query_body)
 
     def get_match_batch(self, raw_query, batch_begin, raw_names, raw_bodies):
         query_name_lex_matrices, query_body_lex_matrices = [], []
