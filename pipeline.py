@@ -92,13 +92,13 @@ class LexHelper():
         query_name_lex_matrices, query_body_lex_matrices = [], []
 
         for i in range(batch_begin, batch_begin + self.batch_size):
-            # if i < len(raw_names):
-            raw_name = raw_names[i]
-            raw_code = raw_bodies[i]
-            doc_name_lex_matrix, query_body_lex_matrix = get_lex_match(self.word_idf, raw_query, raw_name, raw_code,
-                                                                       self.max_query_len, self.max_name_len, self.max_body_len)
-            query_name_lex_matrices.append(doc_name_lex_matrix)
-            query_body_lex_matrices.append(query_body_lex_matrix)
+            if i < len(raw_names):
+                raw_name = raw_names[i]
+                raw_code = raw_bodies[i]
+                doc_name_lex_matrix, query_body_lex_matrix = get_lex_match(self.word_idf, raw_query, raw_name, raw_code,
+                                                                        self.max_query_len, self.max_name_len, self.max_body_len)
+                query_name_lex_matrices.append(doc_name_lex_matrix)
+                query_body_lex_matrices.append(query_body_lex_matrix)
         return np.array(query_name_lex_matrices), np.array(query_body_lex_matrices)
 
 
