@@ -12,7 +12,7 @@ To preprocess the data, you should run
 ```bash
 python pipeline.py
 # or contains detailed data path
-python pipeline.py --data_dir './data/example/' --train_file "train.data_origin.json" --valid_file "valid.data_origin.json" --eval_file "eval.json"
+python pipeline.py --data_dir './data/example/' --train_file "train.data_origin.json" --valid_file "valid.data_origin.json" --eval_file "eval.json" > log/pipeline.log
 ```
 Input: `train.data.json` and `valid.data.json`
 
